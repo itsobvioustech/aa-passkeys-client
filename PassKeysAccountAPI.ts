@@ -108,7 +108,7 @@ export class PassKeysAccountApi extends BaseAccountAPI {
      */
     async getPreVerificationGas (userOp: Partial<UserOperationStruct>): Promise<number> {
         const estimate = await super.getPreVerificationGas(userOp)
-        return estimate*100
+        return estimate*50
     }    
     /**
      * Sign the filled userOp.
