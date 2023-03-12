@@ -3,7 +3,7 @@ import {
 } from '@account-abstraction/sdk/dist/src/BaseAccountAPI'
 import { UserOperationStruct } from '@account-abstraction/contracts'
 import { BigNumber, BigNumberish } from 'ethers'
-import { defaultAbiCoder, arrayify, hexConcat } from 'ethers/lib/utils'
+import { defaultAbiCoder, hexConcat } from 'ethers/lib/utils'
 import { 
     PassKeysAccount, PassKeysAccount__factory,
     PassKeysAccountFactory, PassKeysAccountFactory__factory

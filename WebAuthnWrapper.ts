@@ -3,7 +3,6 @@ import { AuthenticationEncoded, RegistrationEncoded, RegisterOptions, Authentica
 import { BigNumber } from 'ethers'
 import { arrayify, keccak256 } from 'ethers/lib/utils'
 import { WebAuthnUtils } from './utils/WebAuthnUtils'
-import base64url from 'base64url';
 
 export interface IWebAuthnClient {
     register(challenge:string, name?:string, options?:RegisterOptions ): Promise<RegistrationEncoded>
