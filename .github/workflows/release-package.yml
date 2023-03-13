@@ -19,16 +19,8 @@ jobs:
           node-version: 18
           registry-url: https://npm.pkg.github.com/
           scope: '@itsobvioustech'
-      - run: cat /home/runner/work/_temp/.npmrc
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
       - run: npm ci
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
-      - run: ls -al ./node_modules/@itsobvioustech
       - run: npm run build
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
       - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
