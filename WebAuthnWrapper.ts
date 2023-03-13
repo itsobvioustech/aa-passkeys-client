@@ -47,7 +47,7 @@ export class PassKeyKeyPair {
         // this needs to be base64url encoded from raw bytes of the hash
         const challenge = utils.toBase64url(arrayify(payload)).replace(/=/g, '')
 
-        const authData = await this.webAuthnClient.authenticate(challenge, this.keyId, {userVerification: 'required'})
+        const authData = await this.webAuthnClient.authenticate(challenge, this.keyId, {userVerification: 'required', authenticatorType: 'both'})
         let sig = WebAuthnUtils.getMessageSignature(authData.signature)
         let clientDataJSON = new TextDecoder().decode(utils.parseBase64url(authData.clientData))
         let challengePos = clientDataJSON.indexOf(challenge)
