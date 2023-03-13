@@ -22,11 +22,11 @@ jobs:
       - run: cat /home/runner/work/_temp/.npmrc
         env:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
-      - run: ls -al /home/runner/work/_temp/node_modules
-      - run: ls -al .
       - run: npm ci
         env:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+      - run: ls -al /home/runner/work/_temp/node_modules
+      - run: ls -al .
       - run: npm run build
         env:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
