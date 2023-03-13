@@ -14,6 +14,7 @@ export interface PassKeysAccountApiParams extends BaseApiParams {
     factoryAddress: string
     index: BigNumber
     passKeyPair: PassKeyKeyPair
+    txnProgressCallback?: (userOp: UserOperationStruct, state: string) => void
 }
 export class PassKeysAccountApi extends BaseAccountAPI {
     factoryAddress: string
@@ -21,12 +22,18 @@ export class PassKeysAccountApi extends BaseAccountAPI {
     passKeyPair: PassKeyKeyPair
     accountContract?: PassKeysAccount
     factoryContract?: PassKeysAccountFactory
+    txnProgressCallback?: (userOp: UserOperationStruct, state: string) => void
 
     constructor(params: PassKeysAccountApiParams) {
         super(params)
         this.factoryAddress = params.factoryAddress
         this.index = params.index ?? BigNumber.from(0)
         this.passKeyPair = params.passKeyPair
+        this.txnProgressCallback = params.txnProgressCallback
+    }
+
+    setTxnProgressCallback(txnProgressCallback: (userOp: UserOperationStruct, state: string) => void) {
+        this.txnProgressCallback = txnProgressCallback
     }
 
     async _getAccountContract(): Promise<PassKeysAccount> {
@@ -116,6 +123,7 @@ export class PassKeysAccountApi extends BaseAccountAPI {
      */
     async signUserOp (userOp: UserOperationStruct): Promise<UserOperationStruct> {
         console.log("Signing UserOp", userOp)
+        this.txnProgressCallback?.(userOp, 'pre_sign')
         const userOpHash = await this.getUserOpHash(userOp)
         const signature = await this.signUserOpHash(userOpHash)
         return {
