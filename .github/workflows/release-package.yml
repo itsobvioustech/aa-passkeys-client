@@ -18,8 +18,7 @@ jobs:
         with:
           node-version: 18
           registry-url: https://npm.pkg.github.com/
-      - name: Authenticate with private NPM package
-        run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" > ~/.npmrc
+          scope: '@itsobvioustech'
       - run: npm ci
       - run: npm run build
       - run: npm publish
