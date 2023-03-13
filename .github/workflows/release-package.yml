@@ -25,7 +25,7 @@ jobs:
       - run: npm ci
         env:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
-      - run: ls -al ./node_modules
+      - run: ls -al ./node_modules/@itsobvioustech
       - run: npm run build
         env:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
