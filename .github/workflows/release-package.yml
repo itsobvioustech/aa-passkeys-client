@@ -20,6 +20,8 @@ jobs:
           registry-url: https://npm.pkg.github.com/
           scope: '@itsobvioustech'
       - run: cat /home/runner/work/_temp/.npmrc
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
       - run: npm ci
         env:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
