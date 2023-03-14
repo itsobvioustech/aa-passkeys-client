@@ -42,18 +42,26 @@ export class PassKeyKeyPair {
         this.regTime = regTime
     }
 
+    static async getValidPassKeyPair(webAuthnClient: IWebAuthnClient) {
+        const authData = await webAuthnClient.authenticate(utils.randomChallenge(), undefined, {userVerification: 'required', authenticatorType: 'both'})
+        const sig = WebAuthnUtils.getMessageSignature(authData.signature)
+        const parsedAuth = parsers.parseAuthentication(authData)
+        return new PassKeyKeyPair(parsedAuth.credentialId, BigNumber.from(0), BigNumber.from(0), webAuthnClient, 
+            parsedAuth.authenticator.name, parsedAuth.authenticator.aaguid, parsedAuth.authenticator.name, Date.now())
+    }
+
     async signChallenge(payload: string): Promise<PassKeySignature> {
         // ophash is a keccak256 hash of the user operation as a hex string
         // this needs to be base64url encoded from raw bytes of the hash
         const challenge = utils.toBase64url(arrayify(payload)).replace(/=/g, '')
 
         const authData = await this.webAuthnClient.authenticate(challenge, this.keyId, {userVerification: 'required', authenticatorType: 'both'})
-        let sig = WebAuthnUtils.getMessageSignature(authData.signature)
-        let clientDataJSON = new TextDecoder().decode(utils.parseBase64url(authData.clientData))
-        let challengePos = clientDataJSON.indexOf(challenge)
-        let challengePrefix = clientDataJSON.substring(0, challengePos)
-        let challengeSuffix = clientDataJSON.substring(challengePos + challenge.length)
-        let authenticatorData = new Uint8Array(utils.parseBase64url(authData.authenticatorData))
+        const sig = WebAuthnUtils.getMessageSignature(authData.signature)
+        const clientDataJSON = new TextDecoder().decode(utils.parseBase64url(authData.clientData))
+        const challengePos = clientDataJSON.indexOf(challenge)
+        const challengePrefix = clientDataJSON.substring(0, challengePos)
+        const challengeSuffix = clientDataJSON.substring(challengePos + challenge.length)
+        const authenticatorData = new Uint8Array(utils.parseBase64url(authData.authenticatorData))
         return {
             id: this.keyHash,
             r: sig[0],
