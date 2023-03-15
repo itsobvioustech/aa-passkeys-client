@@ -1,6 +1,6 @@
 {
   "name": "@itsobvioustech/aa-passkeys-client",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Client for aa-passkeys-wallet",
   "main": "./build/index.js",
   "scripts": {
@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "@account-abstraction/sdk": "^0.5.0",
-    "@itsobvioustech/aa-passkeys-wallet": "^0.0.1",
+    "@itsobvioustech/aa-passkeys-wallet": "^0.0.2",
     "@passwordless-id/webauthn": "^1.2.0",
     "@peculiar/asn1-ecc": "^2.3.4",
     "@peculiar/asn1-schema": "^2.3.3",

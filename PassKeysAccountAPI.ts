@@ -122,7 +122,6 @@ export class PassKeysAccountApi extends BaseAccountAPI {
      * @param userOp the UserOperation to sign (with signature field ignored)
      */
     async signUserOp (userOp: UserOperationStruct): Promise<UserOperationStruct> {
-        console.log("Signing UserOp", userOp)
         this.txnProgressCallback?.(userOp, 'pre_sign')
         const userOpHash = await this.getUserOpHash(userOp)
         const signature = await this.signUserOpHash(userOpHash)
