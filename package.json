@@ -1,6 +1,6 @@
 {
   "name": "@itsobvioustech/aa-passkeys-client",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Client for aa-passkeys-wallet",
   "main": "./build/index.js",
   "scripts": {

@@ -6,7 +6,7 @@ import { WebAuthnUtils } from './utils/WebAuthnUtils'
 
 export interface IWebAuthnClient {
     register(challenge:string, name?:string, options?:RegisterOptions ): Promise<RegistrationEncoded>
-    authenticate(challenge: string, keyid?: string, options?: AuthenticateOptions): Promise<AuthenticationEncoded>
+    authenticate(challenge: string, keyid?: string[], options?: AuthenticateOptions): Promise<AuthenticationEncoded>
 }
 
 export interface PassKeySignature {
@@ -42,8 +42,8 @@ export class PassKeyKeyPair {
         this.regTime = regTime
     }
 
-    static async getValidPassKeyPair(webAuthnClient: IWebAuthnClient) {
-        const authData = await webAuthnClient.authenticate(utils.randomChallenge(), undefined, {userVerification: 'required', authenticatorType: 'both'})
+    static async getValidPassKeyPair(webAuthnClient: IWebAuthnClient, passkeyIds?: string[]): Promise<PassKeyKeyPair> {
+        const authData = await webAuthnClient.authenticate(utils.randomChallenge(), passkeyIds, {userVerification: 'required', authenticatorType: 'both'})
         const sig = WebAuthnUtils.getMessageSignature(authData.signature)
         const parsedAuth = parsers.parseAuthentication(authData)
         return new PassKeyKeyPair(parsedAuth.credentialId, BigNumber.from(0), BigNumber.from(0), webAuthnClient, 
@@ -54,7 +54,7 @@ export class PassKeyKeyPair {
         // ophash is a keccak256 hash of the user operation as a hex string
         // this needs to be base64url encoded from raw bytes of the hash
         const challenge = utils.toBase64url(arrayify(payload)).replace(/=/g, '')
-        const authData = await this.webAuthnClient.authenticate(challenge, this.keyId, {userVerification: 'required', authenticatorType: 'both'})
+        const authData = await this.webAuthnClient.authenticate(challenge, [this.keyId], {userVerification: 'required', authenticatorType: 'both'})
         const sig = WebAuthnUtils.getMessageSignature(authData.signature)
         const clientDataJSON = new TextDecoder().decode(utils.parseBase64url(authData.clientData))
         const challengePos = clientDataJSON.indexOf(challenge)
@@ -80,8 +80,8 @@ export class WebAuthnWrapper implements IWebAuthnClient {
     async register(challenge: string, name?:string, options?:RegisterOptions): Promise<RegistrationEncoded> {
         return client.register(name? name : utils.randomChallenge(), challenge, options);
     }
-    async authenticate(challenge: string, keyid?: string | undefined, options?: AuthenticateOptions): Promise<AuthenticationEncoded> {
-        return client.authenticate(keyid? [keyid] : [], challenge, options);
+    async authenticate(challenge: string, keyid?: string[] | undefined, options?: AuthenticateOptions): Promise<AuthenticationEncoded> {
+        return client.authenticate(keyid? keyid : [], challenge, options);
     }
 
     public async registerPassKey(payload: string, name?:string): Promise<PassKeyKeyPair> {

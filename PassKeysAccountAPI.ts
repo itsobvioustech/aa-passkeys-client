@@ -106,7 +106,7 @@ export class PassKeysAccountApi extends BaseAccountAPI {
      * NOTE: createUnsignedUserOp will add to this value the cost of creation, if the contract is not yet created.
      */
     async getVerificationGasLimit (): Promise<BigNumberish> {
-        return 1000000
+        return 600000
     }
 
     /**
@@ -115,7 +115,7 @@ export class PassKeysAccountApi extends BaseAccountAPI {
      */
     async getPreVerificationGas (userOp: Partial<UserOperationStruct>): Promise<number> {
         const estimate = await super.getPreVerificationGas(userOp)
-        return estimate*50
+        return estimate*5
     }    
     /**
      * Sign the filled userOp.
